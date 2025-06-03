@@ -1,5 +1,7 @@
 import turndownPluginGfm from '@guyplusplus/turndown-plugin-gfm';
 import turndown from 'turndown';
+import path from 'path';
+import fs from 'fs';
 import * as shared from './shared.js';
 
 // init single reusable turndown service object upon import
@@ -69,27 +71,25 @@ function initTurndownService() {
 		}
 	});
 
-	// preserve <figure> when it contains a <figcaption>
+	// Obsidian形式の画像処理
 	turndownService.addRule('figure', {
 		filter: 'figure',
 		replacement: (content, node) => {
-			if (node.querySelector('figcaption')) {
-				// extra newlines are necessary for markdown and HTML to render correctly together
-				const result = '\n\n<figure>\n\n' + content + '\n\n</figure>\n\n';
-				return result.replace('\n\n\n\n', '\n\n'); // collapse quadruple newlines
-			} else {
-				// does not contain <figcaption>, do not preserve
-				return '\n' + content + '\n';
+			const img = node.querySelector('img');
+			const figcaption = node.querySelector('figcaption');
+			
+			if (!img) return content;
+			
+			const imgSrc = img.getAttribute('src');
+			const imgName = path.basename(imgSrc);
+			const obsidianImage = `![[${imgName}|caption]]`;
+			
+			if (figcaption) {
+				const captionText = figcaption.textContent.trim();
+				return `\n\n${obsidianImage}\n*${captionText}*\n\n`;
 			}
-		}
-	});
-
-	// preserve <figcaption>
-	turndownService.addRule('figcaption', {
-		filter: 'figcaption',
-		replacement: (content) => {
-			// extra newlines are necessary for markdown and HTML to render correctly together
-			return '\n\n<figcaption>\n\n' + content + '\n\n</figcaption>\n\n';
+			
+			return `\n\n${obsidianImage}\n\n`;
 		}
 	});
 

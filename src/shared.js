@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import path from 'path';
+import fs from 'fs';
 
 // simple data store, populated via intake, used everywhere
 export const config = {};
@@ -88,4 +89,23 @@ export function getFilenameFromUrl(url) {
 		// leave filename as-is and continue
 	}
 	return filename;
+}
+
+export function sanitizeFilename(filename) {
+    // ファイル名に使用できない文字をアンダースコアに置換
+    return filename.replace(/[<>:"/\\|?*\x00-\x1F]/g, '_');
+}
+
+export function getUniqueFilename(directory, basename) {
+    let counter = 0;
+    let filename = basename;
+    const ext = path.extname(basename);
+    const nameWithoutExt = path.basename(basename, ext);
+    
+    while (fs.existsSync(path.join(directory, filename))) {
+        counter++;
+        filename = `${nameWithoutExt}_${counter}${ext}`;
+    }
+    
+    return filename;
 }

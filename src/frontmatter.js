@@ -47,14 +47,15 @@ export function slug(post) {
 export function tags(post) {
 	// array of decoded tag names (yes, they come from <category> nodes, not a typo)
 	const categories = post.data.children('category');
-	return categories
+	const postTags = categories
 		.filter((category) => category.attribute('domain') === 'post_tag')
 		.map((category) => decodeURIComponent(category.attribute('nicename')));
+	return [...new Set([...(post.tags || []), ...postTags])]; // merge with post.tags if it exists
 }
 
 export function title(post) {
 	// not decoded
-	return post.data.childValue('title');
+	return post.title;
 }
 
 export function type(post) {

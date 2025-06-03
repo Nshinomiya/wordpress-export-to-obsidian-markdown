@@ -1,0 +1,3 @@
+node app --input=input/WordPress.2025-05-31.xml --post-folders=false --prefix-date=false --date-folders=none --save-images=all --output=output --frontmatter-fields=title,slug,date:created,tags,excerpt:description,coverImage --timezone=Asia/Tokyo --quote-date=true
+
+# npx wordpress-export-to-markdown --input=projects/wordpress2markdown/input/WordPress.2025-05-31.xml --output=projects/wordpress2markdown/output --frontmatter-fields=title,slug,date:created,tags,excerpt:description,coverImage,draft --timezone=Asia/Tokyo --quote-date=true

@@ -96,7 +96,9 @@ function buildPost(data) {
 		type: data.childValue('post_type'),
 		id: data.childValue('post_id'),
 		isDraft: data.childValue('status') === 'draft',
+		title: data.childValue('title'),
 		slug: decodeURIComponent(data.childValue('post_name')),
+		tags: data.childValue('status') === 'draft' ? ['blog-draft'] : ['blog-published'],
 		date: getPostDate(data),
 		coverImageId: getPostMetaValue(data, '_thumbnail_id'),
 

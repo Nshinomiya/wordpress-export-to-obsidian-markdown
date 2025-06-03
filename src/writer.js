@@ -46,7 +46,11 @@ async function writeMarkdownFilesPromise(posts) {
 	let existingCount = 0;
 	let delay = 0;
 	const payloads = posts.flatMap((post) => {
-		const destinationPath = shared.buildPostPath(post);
+		let filename = post.title ? shared.sanitizeFilename(post.title) + '.md' : shared.getSlugWithFallback(post) + '.md';
+		const directory = path.dirname(shared.buildPostPath(post));
+		filename = shared.getUniqueFilename(directory, filename);
+		const destinationPath = path.join(directory, filename);
+		
 		if (checkFile(destinationPath)) {
 			// already exists, don't need to save again
 			existingCount++;
@@ -55,7 +59,7 @@ async function writeMarkdownFilesPromise(posts) {
 			const payload = {
 				item: post,
 				type: post.type,
-				name: shared.getSlugWithFallback(post),
+				name: shared.sanitizeFilename(post.title) || shared.getSlugWithFallback(post),
 				destinationPath,
 				delay
 			};
