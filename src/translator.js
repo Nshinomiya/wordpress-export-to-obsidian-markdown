@@ -17,6 +17,12 @@ function initTurndownService() {
 	turndownService.use(turndownPluginGfm.tables);
 
 	turndownService.remove(['style']); // <style> contents get dumped as plain text, would rather remove
+	// In my Obsidian Vault, underscores from em tag conversion are seen as image captions, 
+	// so I remove them. Comment out or delete if not needed.
+	turndownService.addRule('em', {
+		filter: 'em',
+		replacement: (content) => content
+	});
 
 	// preserve embedded tweets
 	turndownService.addRule('tweet', {
