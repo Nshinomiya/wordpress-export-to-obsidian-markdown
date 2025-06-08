@@ -17,6 +17,7 @@ function initTurndownService() {
 	turndownService.use(turndownPluginGfm.tables);
 
 	turndownService.remove(['style']); // <style> contents get dumped as plain text, would rather remove
+	
 	// In my Obsidian Vault, underscores from em tag conversion are seen as image captions, 
 	// so I remove them. Comment out or delete if not needed.
 	turndownService.addRule('em', {
@@ -111,6 +112,16 @@ function initTurndownService() {
 		}
 	});
 
+	// (Only if using the SWELL theme) Rules for removing STEP labels
+    turndownService.addRule('stepLabel', {
+        filter: (node) => {
+            return node.nodeName === 'DIV' && 
+                   node.classList.contains('swell-block-step__number') &&
+                   node.querySelector('span.__label');
+        },
+        replacement: () => '' // Remove STEP label by returning an empty string
+    });
+
 	return turndownService;
 }
 
@@ -125,6 +136,9 @@ export function getPostContent(content) {
 		// folder so update references in post content to match
 		content = content.replace(/(<img(?=\s)[^>]+?(?<=\s)src=")[^"]*?([^/"]+?)(\?[^"]*)?("[^>]*>)/gi, '$1images/$2$4');
 	}
+
+	// Conversion of HTML enclosed in [html] tags
+    content = content.replace(/\[html\](&lt;|\<)(h[1-6])(&gt;|\>)(.+?)\1(\/\2)\3\[\/html\]/g, '<$2>$4</$2>');
 
 	// preserve "more" separator, max one per post, optionally with custom label
 	// by escaping angle brackets (will be unescaped during turndown conversion)
