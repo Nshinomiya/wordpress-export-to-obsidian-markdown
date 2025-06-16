@@ -11,6 +11,37 @@ Converts a WordPress export XML file into Markdown files. This makes it easy to 
 - Downloads images and updates references to them.
 - User-friendly wizard guides you through the process.
 - Lots of command line options for configuration, if needed.
+- Uses post title for filenames with automatic handling of duplicates.
+- Converts HTML tags in [html] blocks to proper Markdown format.
+- Supports Obsidian-style image links with captions.
+- Handles footnotes with proper Markdown reference format.
+- Auto-assigns blog-published/blog-draft tags based on post status.
+
+## Enhanced Features
+
+### Filename Handling
+
+- Uses post titles for filenames instead of slugs
+- Automatically sanitizes filenames by replacing invalid characters with underscores
+- Adds numerical suffixes for duplicate filenames (e.g., mypost_1.md)
+
+### Obsidian Support
+
+- Converts image tags to Obsidian-style wiki links: `![[image.png|caption]]`
+- Preserves image captions in italics below the image
+- Supports footnotes with proper Markdown reference format
+
+### HTML Processing
+
+- Converts HTML tags wrapped in [html] tags to proper Markdown
+- Special handling for headings (h1-h6) to ensure proper Markdown conversion
+- Removes SWELL theme's STEP labels for cleaner output
+
+### Automatic Tagging
+
+- Adds 'blog-published' tag to published posts
+- Adds 'blog-draft' tag to draft posts
+- Preserves existing tags while adding status tags
 
 ## Quick Start
 
