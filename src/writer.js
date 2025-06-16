@@ -114,6 +114,15 @@ async function loadMarkdownFilePromise(post) {
 	});
 
 	output += `---\n\n${post.content}\n`;
+
+	// Add footnotes if exists
+	if (post.footnotes && post.footnotes.length > 0) {
+		output += '\n\n';
+		post.footnotes.forEach((note, index) => {
+			output += `[^${index+1}]: ${note.content}\n`;
+		});
+	}
+
 	return output;
 }
 

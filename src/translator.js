@@ -19,7 +19,7 @@ function initTurndownService() {
 	turndownService.remove(['style']); // <style> contents get dumped as plain text, would rather remove
 	
 	// In my Obsidian Vault, underscores from em tag conversion are seen as image captions, 
-	// so I remove them. Comment out or delete if not needed.
+	// so I leave them. Comment out or delete if not needed.
 	turndownService.addRule('em', {
 		filter: 'em',
 		replacement: (content) => content
@@ -121,6 +121,18 @@ function initTurndownService() {
         },
         replacement: () => '' // Remove STEP label by returning an empty string
     });
+
+	// footnote
+	turndownService.addRule('footnote', {
+		filter: (node) => {
+			return node.nodeName === 'SUP' && node.hasAttribute('data-fn');
+		},
+		replacement: (content, node) => {
+			// get the text of the a tag
+			const linkText = node.querySelector('a')?.textContent;
+			return `[^${linkText}]`;
+		}
+	});
 
 	return turndownService;
 }

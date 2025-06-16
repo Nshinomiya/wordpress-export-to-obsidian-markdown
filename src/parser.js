@@ -100,6 +100,10 @@ function buildPost(data) {
 		slug: decodeURIComponent(data.childValue('post_name')),
 		tags: data.childValue('status') === 'draft' ? ['blog-draft'] : ['blog-published'],
 		date: getPostDate(data),
+
+		// Add footnotes
+		footnotes: JSON.parse(getPostMetaValue(data, 'footnotes') || '[]'),
+
 		coverImageId: getPostMetaValue(data, '_thumbnail_id'),
 
 		// these are possibly set later in mergeImagesIntoPosts()
